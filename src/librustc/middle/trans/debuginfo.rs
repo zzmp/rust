@@ -148,7 +148,7 @@ enum debug_metadata {
     retval_metadata(@metadata<retval_md>),
 }
 
-fn cast_safely<T: Copy, U>(val: T) -> U {
+fn cast_safely<T:Copy,U>(val: T) -> U {
     unsafe {
         let val2 = val;
         return cast::transmute(val2);
@@ -170,7 +170,7 @@ fn md_from_metadata<T>(val: debug_metadata) -> T {
     }
 }
 
-fn cached_metadata<T: Copy>(cache: metadata_cache,
+fn cached_metadata<T:Copy>(cache: metadata_cache,
                             mdtag: int,
                             eq_fn: fn(md: T) -> bool)
                          -> Option<T> {

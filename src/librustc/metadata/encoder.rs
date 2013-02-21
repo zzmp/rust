@@ -964,7 +964,7 @@ fn encode_info_for_items(ecx: @encode_ctxt, ebml_w: writer::Encoder,
 
 // Path and definition ID indexing
 
-fn create_index<T: Copy Hash IterBytes>(index: ~[entry<T>]) ->
+fn create_index<T:Copy + Hash + IterBytes>(index: ~[entry<T>]) ->
    ~[@~[entry<T>]] {
     let mut buckets: ~[@mut ~[entry<T>]] = ~[];
     for uint::range(0u, 256u) |_i| { buckets.push(@mut ~[]); };
