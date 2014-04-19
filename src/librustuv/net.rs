@@ -252,10 +252,9 @@ impl TcpWatcher {
             n => Err(UvError(n))
         };
 
-        extern fn timer_cb(handle: *uvll::uv_timer_t, status: c_int) {
+        extern fn timer_cb(handle: *uvll::uv_timer_t) {
             // Don't close the corresponding tcp request, just wake up the task
             // and let RAII take care of the pending watcher.
-            assert_eq!(status, 0);
             let cx: &mut Ctx = unsafe {
                 &mut *(uvll::get_data_for_uv_handle(handle) as *mut Ctx)
             };
