@@ -188,20 +188,20 @@ mod imp {
     use libc::{LPSECURITY_ATTRIBUTES, BOOL, LPCSTR, HANDLE, LARGE_INTEGER,
                     LONG, LPVOID, DWORD, c_void};
 
-    pub type PTIMERAPCROUTINE = *c_void;
+    pub type PTIMERAPCROUTINE = *mut c_void;
 
     extern "system" {
         pub fn CreateWaitableTimerA(lpTimerAttributes: LPSECURITY_ATTRIBUTES,
                                     bManualReset: BOOL,
                                     lpTimerName: LPCSTR) -> HANDLE;
         pub fn SetWaitableTimer(hTimer: HANDLE,
-                                pDueTime: *LARGE_INTEGER,
+                                pDueTime: *const LARGE_INTEGER,
                                 lPeriod: LONG,
                                 pfnCompletionRoutine: PTIMERAPCROUTINE,
                                 lpArgToCompletionRoutine: LPVOID,
                                 fResume: BOOL) -> BOOL;
         pub fn WaitForMultipleObjects(nCount: DWORD,
-                                      lpHandles: *HANDLE,
+                                      lpHandles: *const HANDLE,
                                       bWaitAll: BOOL,
                                       dwMilliseconds: DWORD) -> DWORD;
         pub fn WaitForSingleObject(hHandle: HANDLE,
