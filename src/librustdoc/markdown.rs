@@ -62,7 +62,8 @@ fn extract_leading_metadata<'a>(s: &'a str) -> (Vec<&'a str>, &'a str) {
     (metadata, "")
 }
 
-fn load_external_files(names: &[String]) -> Option<String> {
+// Used in static/render
+pub fn load_external_files(names: &[String]) -> Option<String> {
     let mut out = String::new();
     for name in names.iter() {
         out.push_str(load_or_return!(name.as_slice(), None, None).as_slice());

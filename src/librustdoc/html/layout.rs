@@ -15,6 +15,9 @@ use std::io;
 pub struct Layout {
     pub logo: String,
     pub favicon: String,
+    pub in_header: String,
+    pub before_content: String,
+    pub after_content: String,
     pub krate: String,
     pub playground_url: String,
 }
@@ -44,6 +47,7 @@ r##"<!DOCTYPE html>
     <link rel="stylesheet" type="text/css" href="{root_path}main.css">
 
     {favicon}
+    {in_header}
 </head>
 <body>
     <!--[if lte IE 8]>
@@ -52,6 +56,8 @@ r##"<!DOCTYPE html>
         things.
     </div>
     <![endif]-->
+
+    {before_content}
 
     <section class="sidebar">
         {logo}
@@ -114,6 +120,8 @@ r##"<!DOCTYPE html>
     <script src="{root_path}main.js"></script>
     {play_js}
     <script async src="{root_path}search-index.js"></script>
+
+    {after_content}
 </body>
 </html>"##,
     content   = *t,
@@ -133,6 +141,9 @@ r##"<!DOCTYPE html>
     } else {
         format!(r#"<link rel="shortcut icon" href="{}">"#, layout.favicon)
     },
+    in_header = layout.in_header,
+    before_content = layout.before_content,
+    after_content = layout.after_content,
     sidebar   = *sidebar,
     krate     = layout.krate,
     play_url  = layout.playground_url,

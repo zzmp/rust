@@ -114,15 +114,16 @@ pub fn opts() -> Vec<getopts::OptGroup> {
         optmulti("", "markdown-css", "CSS files to include via <link> in a rendered Markdown file",
                  "FILES"),
         optmulti("", "markdown-in-header",
-                 "files to include inline in the <head> section of a rendered Markdown file",
+                 "files to include inline in the <head> section of a rendered Markdown file \
+                 or generated documentation",
                  "FILES"),
         optmulti("", "markdown-before-content",
                  "files to include inline between <body> and the content of a rendered \
-                 Markdown file",
+                 Markdown file or generated documentation",
                  "FILES"),
         optmulti("", "markdown-after-content",
                  "files to include inline between the content and </body> of a rendered \
-                 Markdown file",
+                 Markdown file or generated documentation",
                  "FILES"),
         optopt("", "markdown-playground-url",
                "URL to send code snippets to", "URL")
@@ -215,7 +216,7 @@ pub fn main_args(args: &[String]) -> int {
     let started = time::precise_time_ns();
     match matches.opt_str("w").as_ref().map(|s| s.as_slice()) {
         Some("html") | None => {
-            match html::render::run(krate, output.unwrap_or(Path::new("doc"))) {
+            match html::render::run(krate, &matches, output.unwrap_or(Path::new("doc"))) {
                 Ok(()) => {}
                 Err(e) => fail!("failed to generate documentation: {}", e),
             }

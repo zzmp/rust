@@ -41,6 +41,10 @@ use std::str;
 use std::string::String;
 use std::sync::Arc;
 
+use getopts::Matches;
+
+use super::super::markdown::load_external_files;
+
 use serialize::json::ToJson;
 use syntax::ast;
 use syntax::ast_util;
@@ -78,7 +82,7 @@ pub struct Context {
     /// This changes as the context descends into the module hierarchy.
     pub dst: Path,
     /// This describes the layout of each page, and is not modified after
-    /// creation of the context (contains info like the favicon)
+    /// creation of the context (contains info like the favicon and added markdown).
     pub layout: layout::Layout,
     /// This map is a list of what should be displayed on the sidebar of the
     /// current page. The key is the section header (traits, modules,
@@ -220,7 +224,7 @@ local_data_key!(pub cache_key: Arc<Cache>)
 local_data_key!(pub current_location_key: Vec<String> )
 
 /// Generates the documentation for `crate` into the directory `dst`
-pub fn run(mut krate: clean::Crate, dst: Path) -> io::IoResult<()> {
+pub fn run(mut krate: clean::Crate, matches: &Matches, dst: Path) -> io::IoResult<()> {
     let mut cx = Context {
         dst: dst,
         current: Vec::new(),
@@ -229,12 +233,33 @@ pub fn run(mut krate: clean::Crate, dst: Path) -> io::IoResult<()> {
         layout: layout::Layout {
             logo: "".to_string(),
             favicon: "".to_string(),
+            in_header: "".to_string(),
+            before_content: "".to_string(),
+            after_content: "".to_string(),
             krate: krate.name.clone(),
             playground_url: "".to_string(),
         },
         include_sources: true,
         render_redirect_pages: false,
     };
+
+    // Render optional markdown to html
+    cx.layout.in_header = match load_external_files(matches.opt_strs("markdown-in-header")
+                                                     .as_slice()) {
+        Some(md) => format!("{}", Markdown(md.as_slice())),
+        None => "".to_string()
+    };
+    cx.layout.before_content = match load_external_files(matches.opt_strs("markdown-before-content")
+                                                     .as_slice()) {
+        Some(md) => format!("{}", Markdown(md.as_slice())),
+        None => "".to_string()
+    };
+    cx.layout.after_content = match load_external_files(matches.opt_strs("markdown-after-content")
+                                                     .as_slice()) {
+        Some(md) => format!("{}", Markdown(md.as_slice())),
+        None => "".to_string()
+    };
+
     try!(mkdir(&cx.dst));
 
     // Crawl the crate attributes looking for attributes which control how we're
