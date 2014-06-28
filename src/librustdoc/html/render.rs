@@ -244,17 +244,17 @@ pub fn run(mut krate: clean::Crate, matches: &Matches, dst: Path) -> io::IoResul
     };
 
     // Render optional markdown to html
-    cx.layout.in_header = match load_external_files(matches.opt_strs("markdown-in-header")
+    cx.layout.in_header = match load_external_files(matches.opt_strs("html-in-header")
                                                      .as_slice()) {
         Some(md) => md.clone(),
         None => "".to_string()
     };
-    cx.layout.before_content = match load_external_files(matches.opt_strs("markdown-before-content")
+    cx.layout.before_content = match load_external_files(matches.opt_strs("html-before-content")
                                                      .as_slice()) {
         Some(md) => md.clone(),
         None => "".to_string()
     };
-    cx.layout.after_content = match load_external_files(matches.opt_strs("markdown-after-content")
+    cx.layout.after_content = match load_external_files(matches.opt_strs("html-after-content")
                                                      .as_slice()) {
         Some(md) => md.clone(),
         None => "".to_string()

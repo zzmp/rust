@@ -93,11 +93,11 @@ pub fn render(input: &str, mut output: Path, matches: &getopts::Matches) -> int 
     let playground = playground.unwrap_or("".to_string());
 
     let (in_header, before_content, after_content) =
-        match (load_external_files(matches.opt_strs("markdown-in-header")
+        match (load_external_files(matches.opt_strs("html-in-header")
                                           .as_slice()),
-               load_external_files(matches.opt_strs("markdown-before-content")
+               load_external_files(matches.opt_strs("html-before-content")
                                           .as_slice()),
-               load_external_files(matches.opt_strs("markdown-after-content")
+               load_external_files(matches.opt_strs("html-after-content")
                                           .as_slice())) {
         (Some(a), Some(b), Some(c)) => (a,b,c),
         _ => return 3

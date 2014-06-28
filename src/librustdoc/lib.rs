@@ -113,15 +113,15 @@ pub fn opts() -> Vec<getopts::OptGroup> {
                  "ARGS"),
         optmulti("", "markdown-css", "CSS files to include via <link> in a rendered Markdown file",
                  "FILES"),
-        optmulti("", "markdown-in-header",
+        optmulti("", "html-in-header",
                  "files to include inline in the <head> section of a rendered Markdown file \
                  or generated documentation",
                  "FILES"),
-        optmulti("", "markdown-before-content",
+        optmulti("", "html-before-content",
                  "files to include inline between <body> and the content of a rendered \
                  Markdown file or generated documentation",
                  "FILES"),
-        optmulti("", "markdown-after-content",
+        optmulti("", "html-after-content",
                  "files to include inline between the content and </body> of a rendered \
                  Markdown file or generated documentation",
                  "FILES"),
