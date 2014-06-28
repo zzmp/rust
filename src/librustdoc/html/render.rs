@@ -43,7 +43,7 @@ use std::sync::Arc;
 
 use getopts::Matches;
 
-use super::super::markdown::load_external_files;
+use markdown::load_external_files;
 
 use serialize::json::ToJson;
 use syntax::ast;
@@ -82,7 +82,7 @@ pub struct Context {
     /// This changes as the context descends into the module hierarchy.
     pub dst: Path,
     /// This describes the layout of each page, and is not modified after
-    /// creation of the context (contains info like the favicon and added markdown).
+    /// creation of the context (contains info like the favicon and added html).
     pub layout: layout::Layout,
     /// This map is a list of what should be displayed on the sidebar of the
     /// current page. The key is the section header (traits, modules,
@@ -246,17 +246,17 @@ pub fn run(mut krate: clean::Crate, matches: &Matches, dst: Path) -> io::IoResul
     // Render optional markdown to html
     cx.layout.in_header = match load_external_files(matches.opt_strs("markdown-in-header")
                                                      .as_slice()) {
-        Some(md) => format!("{}", Markdown(md.as_slice())),
+        Some(md) => md.clone(),
         None => "".to_string()
     };
     cx.layout.before_content = match load_external_files(matches.opt_strs("markdown-before-content")
                                                      .as_slice()) {
-        Some(md) => format!("{}", Markdown(md.as_slice())),
+        Some(md) => md.clone(),
         None => "".to_string()
     };
     cx.layout.after_content = match load_external_files(matches.opt_strs("markdown-after-content")
                                                      .as_slice()) {
-        Some(md) => format!("{}", Markdown(md.as_slice())),
+        Some(md) => md.clone(),
         None => "".to_string()
     };
 

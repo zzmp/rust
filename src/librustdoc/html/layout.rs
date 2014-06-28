@@ -57,8 +57,6 @@ r##"<!DOCTYPE html>
     </div>
     <![endif]-->
 
-    {before_content}
-
     <section class="sidebar">
         {logo}
         {sidebar}
@@ -75,10 +73,12 @@ r##"<!DOCTYPE html>
         </form>
     </nav>
 
+    <section id='header' class="content header">{before_content}</section>
+
     <section id='main' class="content {ty}">{content}</section>
     <section id='search' class="content hidden"></section>
 
-    <section class="footer"></section>
+    <section class="content footer">{after_content}</section>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
