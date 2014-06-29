@@ -43,7 +43,7 @@ use std::sync::Arc;
 
 use getopts::Matches;
 
-use markdown::load_external_files;
+use externalfiles::ExternalHtml;
 
 use serialize::json::ToJson;
 use syntax::ast;
@@ -224,7 +224,7 @@ local_data_key!(pub cache_key: Arc<Cache>)
 local_data_key!(pub current_location_key: Vec<String> )
 
 /// Generates the documentation for `crate` into the directory `dst`
-pub fn run(mut krate: clean::Crate, matches: &Matches, dst: Path) -> io::IoResult<()> {
+pub fn run(mut krate: clean::Crate, external_html: &ExternalHtml, dst: Path) -> io::IoResult<()> {
     let mut cx = Context {
         dst: dst,
         current: Vec::new(),
@@ -233,31 +233,12 @@ pub fn run(mut krate: clean::Crate, matches: &Matches, dst: Path) -> io::IoResul
         layout: layout::Layout {
             logo: "".to_string(),
             favicon: "".to_string(),
-            in_header: "".to_string(),
-            before_content: "".to_string(),
-            after_content: "".to_string(),
+            external_html: external_html,
             krate: krate.name.clone(),
             playground_url: "".to_string(),
         },
         include_sources: true,
         render_redirect_pages: false,
-    };
-
-    // Render optional markdown to html
-    cx.layout.in_header = match load_external_files(matches.opt_strs("html-in-header")
-                                                     .as_slice()) {
-        Some(md) => md.clone(),
-        None => "".to_string()
-    };
-    cx.layout.before_content = match load_external_files(matches.opt_strs("html-before-content")
-                                                     .as_slice()) {
-        Some(md) => md.clone(),
-        None => "".to_string()
-    };
-    cx.layout.after_content = match load_external_files(matches.opt_strs("html-after-content")
-                                                     .as_slice()) {
-        Some(md) => md.clone(),
-        None => "".to_string()
     };
 
     try!(mkdir(&cx.dst));

@@ -11,13 +11,13 @@
 use std::fmt;
 use std::io;
 
+use externalfiles::ExternalHtml;
+
 #[deriving(Clone)]
-pub struct Layout {
+pub struct Layout<'a> {
     pub logo: String,
     pub favicon: String,
-    pub in_header: String,
-    pub before_content: String,
-    pub after_content: String,
+    pub external_html: &'a ExternalHtml,
     pub krate: String,
     pub playground_url: String,
 }
@@ -141,9 +141,9 @@ r##"<!DOCTYPE html>
     } else {
         format!(r#"<link rel="shortcut icon" href="{}">"#, layout.favicon)
     },
-    in_header = layout.in_header,
-    before_content = layout.before_content,
-    after_content = layout.after_content,
+    in_header = layout.external_html.in_header,
+    before_content = layout.external_html.before_content,
+    after_content = layout.external_html.after_content,
     sidebar   = *sidebar,
     krate     = layout.krate,
     play_url  = layout.playground_url,
